@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     char *cmd = "df";
     char *cmd_args[3] = {"df", "-h", NULL};
     char res[2048];
-    get_cmd_output(res, 2048, cmd, cmd_args);
+    get_output(res, sizeof(res) - 1, cmd, cmd_args);
     wait(NULL);
 
     char current_avail[16];
@@ -35,10 +35,9 @@ int main(int argc, char **argv) {
     while(buf != NULL) {
         fetch_line_data(buf, current_avail, current_mount_point);
         if(streq("/", current_mount_point)) {
-            char res[32] = "DISK ";
-            strcat(res, current_avail);
-            strcat(res, sep);
-            printf("%s\n", res);
+            char *res = "DISK ";
+
+            printf("%s%s%s\n", res, current_avail, sep);
             exit(EXIT_SUCCESS);
         }
         buf = strtok_r(NULL, "\n", &rest);

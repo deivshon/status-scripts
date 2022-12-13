@@ -50,6 +50,6 @@ int main(int argc, char **argv) {
     to_formatted_bytes(memTotalStr, memTotal);
     to_formatted_bytes(inUseStr, inUse);
     sprintf(result, "RAM %s/%s (%.2f%%)", inUseStr, memTotalStr, percentageInUse);
-    strcat(result, sep);
-    printf("%s\n", result);
+
+    printf("%s%s\n", result, sep);
 }

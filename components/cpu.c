@@ -2,6 +2,7 @@
 #include "../utils.h"
 
 #define DATA_FILE_PATH "/tmp/cpuData"
+#define PROC_FILE_PATH "/proc/stat"
 
 void init_cpu_usage(unsigned long cpu_usage[CPU_TIME_FIELDS]) {
     for(int i = 0; i < CPU_TIME_FIELDS; i++) cpu_usage[i] = 0;
@@ -34,7 +35,7 @@ int main(int argc, char **argv) {
     unsigned long new_cpu_usage[CPU_TIME_FIELDS];
     char new_cpu_usage_str[256];
     init_cpu_usage(new_cpu_usage);
-    get_cpu_usage(new_cpu_usage, new_cpu_usage_str, "/proc/stat");
+    get_cpu_usage(new_cpu_usage, new_cpu_usage_str, PROC_FILE_PATH);
 
     FILE *fs = fopen(DATA_FILE_PATH, "w");
     fprintf(fs, "%s\n", new_cpu_usage_str);

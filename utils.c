@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-void get_cmd_output(char *dest, int dest_size, char *cmd, char **cmd_args) {
+void get_output(char *dest, int dest_size, char *cmd, char **cmd_args) {
     int piped[2];
     if(pipe(piped) == -1) {
         exit(EXIT_FAILURE);
@@ -23,17 +23,19 @@ void get_cmd_output(char *dest, int dest_size, char *cmd, char **cmd_args) {
         dest[0] = '\0';
 
         int c = 0; // Bytes read into buffer each time
-        char buf[1024] = "";
+        char buf[1024];
+        buf[0] = '\0';
+
         close(piped[1]);    // close write end of parent
 
         while((c = read(piped[0], buf, sizeof(buf) - 1))) {
             // Sets the byte after the last one read to '\0', terminating the string
             buf[c] = '\0';
 
+            strncat(dest, buf, dest_size - strlen(dest) - 1);
+
             if(strlen(dest) + strlen(buf) >= (size_t) dest_size)
                 break;
-
-            strcat(dest, buf);
         }
         close(piped[0]);    // close read end of parent: no longer needed
     }

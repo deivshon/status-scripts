@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     char *acpi_command = "acpi";
     char *acpi_args[3] = {acpi_command, "-b", NULL};
 
-    get_cmd_output(acpi_output, sizeof(acpi_output) - 1, acpi_command, acpi_args);
+    get_output(acpi_output, sizeof(acpi_output) - 1, acpi_command, acpi_args);
     str_to_lower(acpi_output);
 
     if(contains_substr(acpi_output, "unavailable")  ||

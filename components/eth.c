@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 
     if(!isUp) exit(EXIT_SUCCESS);
     
-    char res[16] = "ETH: UP";
-    strcat(res, sep);
-    printf("%s\n", res);
+    char *res = "ETH: UP";
+
+    printf("%s%s\n", res, sep);
 }

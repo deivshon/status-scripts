@@ -15,3 +15,7 @@ all: eth-status disk-status ram-status cpu-status mullvad-check-status battery-s
 
 clean:
 	rm -f *-status */*.o $(UTILS_PATH)/*.o
+
+install: all
+	mkdir -p ~/.local/scripts
+	cp *-status ~/.local/scripts

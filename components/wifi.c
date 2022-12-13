@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     char *iw_cmd = "iw";
     char *iw_args[5] = {iw_cmd, "dev", if_name, "link", NULL};
 
-    get_cmd_output(iw_output, sizeof(iw_output) - 1, iw_cmd, iw_args);
+    get_output(iw_output, sizeof(iw_output) - 1, iw_cmd, iw_args);
     if(!strcmp("", iw_output)) {
         printf("WIFI: UP%s\n", sep);
         exit(EXIT_SUCCESS);
@@ -83,6 +83,5 @@ int main(int argc, char **argv) {
     else
         sprintf(result, "%s%d%% %s", label, quality, ssid);
 
-    strcat(result, sep);
-    printf("%s\n", result);
+    printf("%s%s\n", result, sep);
 }

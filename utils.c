@@ -55,7 +55,7 @@ int to_formatted_bytes(char *dest, double bytes) {
     double approx_bytes = bytes;
     unsigned int divisions = 0;
 
-    while(approx_bytes > 1e3 && divisions <= 7) {
+    while(approx_bytes > 1024 && divisions <= 7) {
         approx_bytes /= 1024;
         divisions++;
     }

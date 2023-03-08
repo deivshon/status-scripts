@@ -20,3 +20,7 @@ path = "src/disk.rs"
 [[bin]]
 name = "wifi-status"
 path = "src/wifi.rs"
+
+[[bin]]
+name = "ram-status"
+path = "src/ram.rs"

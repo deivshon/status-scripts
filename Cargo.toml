@@ -16,3 +16,7 @@ strip = true
 [[bin]]
 name = "disk-status"
 path = "src/disk.rs"
+
+[[bin]]
+name = "wifi-status"
+path = "src/wifi.rs"

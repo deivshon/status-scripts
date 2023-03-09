@@ -1,3 +1,5 @@
+pub const NET_DIR: &str = "/sys/class/net";
+
 const SUFFIXES: &[&str; 7] = &["B", "K", "M", "G", "T", "P", "E"];
 
 pub fn format_bytes(bytes: u64) -> String {
@@ -42,4 +44,12 @@ pub fn first_matching_dir(root_dir: &str, prefixes: Vec<&str>, dir_check: Option
 	}
 
 	return None
+}
+
+pub fn operstate_up(interface: &str) -> bool {
+	let Ok(operstate) = std::fs::read_to_string(format!("{}/operstate", interface)) else {
+		return false;
+	};
+
+	return operstate.trim() == "up";
 }

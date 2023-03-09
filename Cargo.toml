@@ -28,3 +28,7 @@ path = "src/ram.rs"
 [[bin]]
 name = "cpu-status"
 path = "src/cpu.rs"
+
+[[bin]]
+name = "eth-status"
+path = "src/eth.rs"

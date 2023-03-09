@@ -1,7 +1,4 @@
 pub mod utils;
-use std::fs;
-
-const NET_DIR: &str = "/sys/class/net";
 
 fn terminate_early(interface: Option<String>) -> ! {
 	match interface {
@@ -10,14 +7,6 @@ fn terminate_early(interface: Option<String>) -> ! {
 	}
 
 	std::process::exit(0);
-}
-
-fn operstate_up(interface: &str) -> bool {
-	let Ok(operstate) = fs::read_to_string(format!("{}/operstate", interface)) else {
-		return false;
-	};
-
-	return operstate.trim() == "up";
 }
 
 fn strength_percentage(dbm: i32) -> i32 {
@@ -32,7 +21,7 @@ fn strength_percentage(dbm: i32) -> i32 {
 }
 
 fn main() {
-	let Some(interface) = utils::first_matching_dir(NET_DIR, vec!["wlan", "wlp"], Some(&operstate_up)) else {
+	let Some(interface) = utils::first_matching_dir(utils::NET_DIR, vec!["wlan", "wlp"], Some(&utils::operstate_up)) else {
 		terminate_early(None);
 	};
 

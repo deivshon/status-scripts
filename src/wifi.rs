@@ -1,3 +1,4 @@
+pub mod utils;
 use std::fs;
 
 const NET_DIR: &str = "/sys/class/net";
@@ -19,30 +20,6 @@ fn operstate_up(interface: &str) -> bool {
 	return operstate.trim() == "up";
 }
 
-fn get_interface() -> Option<String> {
-	let Ok(paths) = fs::read_dir(NET_DIR) else {
-		return None
-	};
-
-	for p in paths {
-		let Ok(ifa) = p else {continue};
-
-		let ifa_path = ifa.path();
-		let Some(ifa_str) = ifa_path.as_os_str().to_str() else {
-			continue
-		};
-
-		let ifa_split = ifa_str.split("/").collect::<Vec<&str>>();
-		let ifa_name = ifa_split[ifa_split.len() - 1];
-		if (ifa_name.starts_with("wlan") || ifa_name.starts_with("wlp")) &&
-		   operstate_up(ifa_str) {
-			return Some(ifa_name.to_string());
-		}
-	}
-
-	return None
-}
-
 fn strength_percentage(dbm: i32) -> i32 {
 	if dbm > -50 {
 		return 100;
@@ -55,7 +32,7 @@ fn strength_percentage(dbm: i32) -> i32 {
 }
 
 fn main() {
-	let Some(interface) = get_interface() else {
+	let Some(interface) = utils::first_matching_dir(NET_DIR, vec!["wlan", "wlp"], Some(&operstate_up)) else {
 		terminate_early(None);
 	};
 

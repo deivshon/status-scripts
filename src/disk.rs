@@ -1,4 +1,4 @@
-mod utils;
+pub mod utils;
 use nix::sys::statvfs::statvfs;
 
 fn main() {

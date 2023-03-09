@@ -1,4 +1,4 @@
-mod utils;
+pub mod utils;
 use std::fs;
 
 const MEMINFO_PATH: &str = "/proc/meminfo";

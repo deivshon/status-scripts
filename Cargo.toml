@@ -24,3 +24,7 @@ path = "src/wifi.rs"
 [[bin]]
 name = "ram-status"
 path = "src/ram.rs"
+
+[[bin]]
+name = "cpu-status"
+path = "src/cpu.rs"

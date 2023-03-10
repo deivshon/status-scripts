@@ -21,7 +21,11 @@ fn strength_percentage(dbm: i32) -> i32 {
 }
 
 fn main() {
-	let Some(interface) = utils::first_matching_dir(utils::NET_DIR, vec!["wlan", "wlp"], Some(&utils::operstate_up)) else {
+	let Some(interface) = utils::first_matching_dir(
+		utils::NET_DIR,
+		Some(vec!["wlan", "wlp"]),
+		Some(&utils::operstate_up)
+	) else {
 		terminate_early(None);
 	};
 

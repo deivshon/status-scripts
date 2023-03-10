@@ -38,3 +38,7 @@ path = "src/eth.rs"
 [[bin]]
 name = "mullvad-status"
 path = "src/mullvad.rs"
+
+[[bin]]
+name = "battery-status"
+path = "src/battery.rs"

@@ -14,7 +14,11 @@ pub fn format_bytes(bytes: u64) -> String {
 	return format!("{:.2}{}", converted_bytes, SUFFIXES[suffix_counter]);
 }
 
-pub fn first_matching_dir(root_dir: &str, prefixes: Vec<&str>, dir_check: Option<&dyn Fn(&str) -> bool>) -> Option<String> {
+pub fn first_matching_dir(
+	root_dir: &str,
+	prefixes: Option<Vec<&str>>,
+	dir_check: Option<&dyn Fn(&str) -> bool>) -> Option<String>
+{
 	let Ok(paths) = std::fs::read_dir(root_dir) else {
 		return None
 	};
@@ -29,18 +33,24 @@ pub fn first_matching_dir(root_dir: &str, prefixes: Vec<&str>, dir_check: Option
 
 		let dir_split = dir_str.split("/").collect::<Vec<&str>>();
 		let dir_name = dir_split[dir_split.len() - 1];
-		if prefixes.iter().any(|p| dir_name.starts_with(p)) {
-			match dir_check {
-				Some(check) => {
-					if !check(dir_str) {
-						continue;
-					}
-				},
-				None => ()
-			}
 
-			return Some(dir_name.to_string());
+		match prefixes {
+			Some(ref p) => 
+				if !p.iter().any(|p| dir_name.starts_with(p)) {
+					continue
+				}
+			None => ()
 		}
+	
+		match dir_check {
+			Some(check) =>
+				if !check(dir_str) {
+					continue;
+				}
+			None => ()
+		}
+
+		return Some(dir_name.to_string());
 	}
 
 	return None

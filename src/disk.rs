@@ -13,5 +13,5 @@ fn main() {
 		std::process::exit(1);
 	};
 	
-	println!("{}", utils::format_bytes(disk.blocks_available() * disk.block_size()))
+	println!("DISK {}", utils::format_bytes(disk.blocks_available() * disk.block_size()))
 }

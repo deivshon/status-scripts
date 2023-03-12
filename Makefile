@@ -8,4 +8,4 @@ clean:
 
 install: all
 	mkdir -p ~/.local/scripts
-	cp $(TARGET_DIR)/*-status ~/.local/scripts
+	cp -f $(TARGET_DIR)/*-status ~/.local/scripts

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 pub const NET_DIR: &str = "/sys/class/net";
 
 const SUFFIXES: &[&str; 7] = &["B", "K", "M", "G", "T", "P", "E"];
@@ -62,4 +64,14 @@ pub fn operstate_up(interface: &str) -> bool {
 	};
 
 	return operstate.trim() == "up";
+}
+
+pub fn format_output(data: HashMap<&str, &String>, format: String) -> String {
+	let mut res = format.clone();
+	
+	for id in data.keys() {
+		res = res.replace(id, &data[id]);
+	}
+
+	return res
 }

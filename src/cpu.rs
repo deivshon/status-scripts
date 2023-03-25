@@ -1,4 +1,7 @@
-use std::fmt;
+pub mod utils;
+
+use std::{fmt, collections::HashMap};
+use argparse::{ArgumentParser, Store};
 
 const PROC_STAT: &str = "/proc/stat";
 const STORAGE_FILE: &str = "/tmp/cpu-status-data";
@@ -136,6 +139,16 @@ impl CpuUsage {
 }
 fn main() {
 	let cpu_usage;
+	let mut format: String = String::from("CPU %p%");
+
+	{
+        let mut ap = ArgumentParser::new();
+
+        ap.refer(&mut format)
+            .add_option(&["-f", "--format"], Store, "Format string (%p -> CPU use percentage)");
+
+        ap.parse_args_or_exit();
+    }
 
 	match CpuUsage::get() {
 		Ok(c) => cpu_usage = c,
@@ -145,5 +158,9 @@ fn main() {
 		}
 	};
 
-	println!("CPU {:.2}%", cpu_usage.percentage());
+	let mut data: HashMap<&str, &String> = HashMap::new();
+	let cpu_percentage = format!("{:.2}", cpu_usage.percentage());
+	data.insert("%p", &cpu_percentage);
+
+	println!("{}", utils::format_output(data, format));
 }

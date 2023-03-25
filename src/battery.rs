@@ -1,7 +1,8 @@
 pub mod utils;
 
-use std::fs;
+use std::{fs, collections::HashMap};
 use std::path::Path;
+use argparse::{ArgumentParser, Store};
 
 const BATTERIES_PATH: &str = "/sys/class/power_supply";
 const CAPACITY_FILE: &str = "capacity";
@@ -18,18 +19,37 @@ fn is_battery(dir: &str) -> bool {
 }
 
 fn main() {
+	let mut format: String = String::from("BAT %p%");
+	let mut format_charging: String = String::from("BAT CHR %p%");
+	let mut format_none: String = String::from("NO BAT");
+	{
+        let mut ap = ArgumentParser::new();
+
+        ap.refer(&mut format)
+            .add_option(&["-f", "--format"], Store, "Format string when not charging (%p -> battery use percentage)");
+
+		ap.refer(&mut format_charging)
+            .add_option(&["-c", "--format-charging"], Store, "Format string when charging (%p -> battery use percentage)");
+
+		ap.refer(&mut format_none)
+            .add_option(&["-n", "--format-none"], Store, "Format string when no string is detected");
+
+        ap.parse_args_or_exit();
+    }
+
 	let Some(battery_path) = utils::first_matching_dir(
 		BATTERIES_PATH,
 		None,
 		Some(&is_battery)
 	) else {
+		println!("{}", format_none);
 		std::process::exit(0);
 	};
 
 	let capacity_path = format!("{}/{}/{}", BATTERIES_PATH, battery_path, CAPACITY_FILE);
 	let status_path = format!("{}/{}/{}", BATTERIES_PATH, battery_path, STATUS_FILE);
 
-	let Ok(capacity) = fs::read_to_string(&capacity_path) else {
+	let Ok(mut capacity) = fs::read_to_string(&capacity_path) else {
 		eprintln!("Could not open {}", &capacity_path);
 		std::process::exit(1);
 	};
@@ -40,5 +60,16 @@ fn main() {
 	};
 	let is_charging = charging_state.trim() == "Charging";
 
-	println!("BAT{} {}%", if is_charging{" CHR"} else {""}, capacity.trim());
+	let mut data: HashMap<&str, &String> = HashMap::new();
+	
+	capacity = String::from(capacity.trim());
+
+	data.insert("%p", &capacity);
+
+	if is_charging {
+		println!("{}", utils::format_output(data, format_charging))
+	}
+	else {
+		println!("{}", utils::format_output(data, format))
+	}
 }

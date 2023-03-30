@@ -87,6 +87,7 @@ fn main() {
 	let strength_percentage = format!("{}", strength_percentage(dbm));
 	let ssid = format!("{}", ssid);
 
+	data.insert("%i", &interface);
 	data.insert("%p", &strength_percentage);
 	data.insert("%s", &ssid);
 

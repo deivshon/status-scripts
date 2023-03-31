@@ -2,7 +2,11 @@ pub mod utils;
 
 use std::{fs, collections::HashMap};
 use std::path::Path;
-use argparse::{ArgumentParser, Store};
+use argparse::{ArgumentParser, Store, StoreTrue};
+
+const FORMAT_LIST: &[&[&str; 2]] = &[
+	&["%p", "remaining battery capacity (percentage)"],
+];
 
 const BATTERIES_PATH: &str = "/sys/class/power_supply";
 const CAPACITY_FILE: &str = "capacity";
@@ -19,6 +23,7 @@ fn is_battery(dir: &str) -> bool {
 }
 
 fn main() {
+	let mut show_format_list = false;
 	let mut format: String = String::from("BAT %p%");
 	let mut format_charging: String = String::from("BAT CHR %p%");
 	let mut format_none: String = String::from("NO BAT");
@@ -26,16 +31,24 @@ fn main() {
         let mut ap = ArgumentParser::new();
 
         ap.refer(&mut format)
-            .add_option(&["-f", "--format"], Store, "Format string when not charging (%p -> battery use percentage)");
+            .add_option(&["-f", "--format"], Store, "Format string when not charging");
 
 		ap.refer(&mut format_charging)
-            .add_option(&["-c", "--format-charging"], Store, "Format string when charging (%p -> battery use percentage)");
+            .add_option(&["-c", "--format-charging"], Store, "Format string when charging");
 
 		ap.refer(&mut format_none)
-            .add_option(&["-n", "--format-none"], Store, "Format string when no string is detected");
+            .add_option(&["-n", "--format-none"], Store, "Format string when no battery is detected");
+
+		ap.refer(&mut show_format_list)
+			.add_option(&["-v", "--format-values"], StoreTrue, "Show possible format values");
 
         ap.parse_args_or_exit();
     }
+
+	if show_format_list {
+		utils::print_format_list(FORMAT_LIST);
+		std::process::exit(0);
+	}
 
 	let Some(battery_path) = utils::first_matching_dir(
 		BATTERIES_PATH,

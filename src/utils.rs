@@ -4,6 +4,9 @@ pub const NET_DIR: &str = "/sys/class/net";
 
 const SUFFIXES: &[&str; 7] = &["B", "K", "M", "G", "T", "P", "E"];
 
+const ID: usize = 0;
+const VALUE_DESCRIPTION: usize = 1;
+
 pub fn format_bytes(bytes: u64) -> String {
 	let mut converted_bytes = bytes as f64;
 	let mut suffix_counter = 0;
@@ -74,4 +77,11 @@ pub fn format_output(data: HashMap<&str, &String>, format: String) -> String {
 	}
 
 	return res
+}
+
+pub fn print_format_list(format_list: &[&[&str; 2]]) {
+	println!("Supported format values");
+	for arg in format_list {
+		println!("\t{} -> {}", arg[ID], arg[VALUE_DESCRIPTION]);
+	}
 }

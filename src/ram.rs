@@ -1,20 +1,36 @@
 pub mod utils;
 
 use std::{fs, collections::HashMap};
-use argparse::{ArgumentParser, Store};
+use argparse::{ArgumentParser, Store, StoreTrue};
 
 const MEMINFO_PATH: &str = "/proc/meminfo";
 
+const FORMAT_LIST: &[&[&str; 2]] = &[
+	&["%p", "RAM use percentage"],
+	&["%a", "available RAM"],
+	&["%u", "used RAM"],
+	&["%t", "total RAM"]
+];
+
 fn main() {
+	let mut show_format_list = false;
 	let mut format: String = String::from("RAM %u/%t (%p%)");
 	{
         let mut ap = ArgumentParser::new();
 
         ap.refer(&mut format)
-            .add_option(&["-f", "--format"], Store, "Format string (%p -> RAM use percentage | %a available RAM | %u used RAM | %t total RAM)");
+            .add_option(&["-f", "--format"], Store, "Format string");
+		
+		ap.refer(&mut show_format_list)
+			.add_option(&["-v", "--format-values"], StoreTrue, "Show possible format values");
 
         ap.parse_args_or_exit();
     }
+
+	if show_format_list {
+		utils::print_format_list(FORMAT_LIST);
+		std::process::exit(0);
+	}
 
 	let Ok(meminfo) = fs::read_to_string(MEMINFO_PATH) else {
 		eprintln!("Could not read {}", MEMINFO_PATH);

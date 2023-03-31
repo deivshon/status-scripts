@@ -1,7 +1,12 @@
 pub mod utils;
 
 use std::{fmt, collections::HashMap};
-use argparse::{ArgumentParser, Store};
+
+use argparse::{ArgumentParser, Store, StoreTrue};
+
+const FORMAT_LIST: &[&[&str; 2]] = &[
+	&["%p", "CPU use percentage"],
+];
 
 const PROC_STAT: &str = "/proc/stat";
 const STORAGE_FILE: &str = "/tmp/cpu-status-data";
@@ -138,6 +143,7 @@ impl CpuUsage {
 	}
 }
 fn main() {
+	let mut show_format_list = false;
 	let cpu_usage;
 	let mut format: String = String::from("CPU %p%");
 
@@ -145,10 +151,18 @@ fn main() {
         let mut ap = ArgumentParser::new();
 
         ap.refer(&mut format)
-            .add_option(&["-f", "--format"], Store, "Format string (%p -> CPU use percentage)");
+            .add_option(&["-f", "--format"], Store, "Format string");
+
+		ap.refer(&mut show_format_list)
+			.add_option(&["-v", "--format-values"], StoreTrue, "Show possible format values");
 
         ap.parse_args_or_exit();
     }
+
+	if show_format_list {
+		utils::print_format_list(FORMAT_LIST);
+		std::process::exit(0);
+	}
 
 	match CpuUsage::get() {
 		Ok(c) => cpu_usage = c,

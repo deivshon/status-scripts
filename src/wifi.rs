@@ -1,7 +1,14 @@
+pub mod utils;
+
 use std::collections::HashMap;
 
-use argparse::{ArgumentParser, Store};
-pub mod utils;
+use argparse::{ArgumentParser, Store, StoreTrue};
+
+const FORMAT_LIST: &[&[&str; 2]] = &[
+	&["%p", "signal strength percentage"],
+	&["%s", "ssid"],
+	&["%i", "interface name"]
+];
 
 fn terminate_early(interface: Option<String>, format_up: &String, format_down: &String) -> ! {
 	match interface {
@@ -24,19 +31,28 @@ fn strength_percentage(dbm: i32) -> i32 {
 }
 
 fn main() {
+	let mut show_format_list = false;
 	let mut format_up: String = String::from("WIFI UP");
 	let mut format_down: String = String::from("WIFI DOWN");
 	{
         let mut ap = ArgumentParser::new();
 
         ap.refer(&mut format_up)
-            .add_option(&["-u", "--format-up"], Store, "Format string when connected, values require iw (%p -> signal strength percentage | %s ssid");
+            .add_option(&["-u", "--format-up"], Store, "Format string when connected, values require iw");
 
 		ap.refer(&mut format_down)
 			.add_option(&["-d", "--format-down"], Store, "Format string when disconnected");
 
+		ap.refer(&mut show_format_list)
+			.add_option(&["-v", "--format-values"], StoreTrue, "Show possible format values");
+
         ap.parse_args_or_exit();
     }
+
+	if show_format_list {
+		utils::print_format_list(FORMAT_LIST);
+		std::process::exit(0);
+	}
 
 	let Some(interface) = utils::first_matching_dir(
 		utils::NET_DIR,

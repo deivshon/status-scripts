@@ -43,3 +43,7 @@ path = "src/mullvad.rs"
 [[bin]]
 name = "battery-status"
 path = "src/battery.rs"
+
+[[bin]]
+name = "battery-notifier"
+path = "src/battery-notifier.rs"

@@ -9,3 +9,4 @@ clean:
 install: all
 	mkdir -p ~/.local/scripts
 	cp -f $(TARGET_DIR)/*-status ~/.local/scripts
+	cp -f $(TARGET_DIR)/battery-notifier ~/.local/scripts

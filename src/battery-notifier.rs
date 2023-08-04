@@ -1,6 +1,6 @@
 pub mod utils;
 
-use notify_rust::Notification;
+use notify_rust::{Notification, Urgency};
 use std::fs;
 use std::thread::sleep;
 
@@ -65,7 +65,7 @@ fn main() {
             let notification = Notification::new()
                 .summary("Battery low")
                 .body(format!("Battery lower than threshold ({}%)", &threshold).as_str())
-                .timeout(0)
+                .urgency(Urgency::Critical)
                 .show();
 
             match notification {

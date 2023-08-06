@@ -11,6 +11,11 @@ pub const BATTERIES_PATH: &str = "/sys/class/power_supply";
 pub const CAPACITY_FILE: &str = "capacity";
 pub const STATUS_FILE: &str = "status";
 
+pub fn failure(msg: &str) -> ! {
+    eprintln!("Failure: {}", msg);
+    std::process::exit(1);
+}
+
 pub fn format_bytes(bytes: u64) -> String {
     let mut converted_bytes = bytes as f64;
     let mut suffix_counter = 0;

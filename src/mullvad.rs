@@ -1,9 +1,9 @@
+pub mod structured;
 pub mod utils;
 
-use std::collections::HashMap;
-
 use argparse::{ArgumentParser, Store, StoreTrue};
-use serde::Deserialize;
+use std::collections::HashMap;
+use structured::mullvad::MullvadData;
 
 const MULLVAD_CHECK: &str = "http://am.i.mullvad.net/json";
 
@@ -11,36 +11,6 @@ const FORMAT_LIST: &[&[&str; 2]] = &[
     &["%h", "server hostname"],
     &["%c", "country based on IP geolocation"],
 ];
-
-#[allow(dead_code)]
-#[derive(Deserialize)]
-struct Blacklist {
-    name: String,
-    link: String,
-    blacklisted: bool,
-}
-
-#[allow(dead_code)]
-#[derive(Deserialize)]
-struct Blacklisted {
-    blacklisted: bool,
-    results: Vec<Blacklist>,
-}
-
-#[allow(dead_code)]
-#[derive(Deserialize)]
-struct MullvadData {
-    ip: String,
-    country: String,
-    city: String,
-    longitude: f32,
-    latitude: f32,
-    mullvad_exit_ip: bool,
-    mullvad_exit_ip_hostname: Option<String>,
-    mullvad_server_type: Option<String>,
-    blacklisted: Blacklisted,
-    organization: String,
-}
 
 fn main() {
     let mut show_format_list = false;

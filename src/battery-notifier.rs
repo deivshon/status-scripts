@@ -80,7 +80,7 @@ fn main() {
 
             match notification {
                 Ok(_) => been_notified_low = true,
-                Err(_) => failure("Could not show notification"),
+                Err(_) => eprintln!("Could not show low charge notification"),
             }
         }
         if current_capacity > high_threshold && is_charging && !been_notified_high {
@@ -97,7 +97,7 @@ fn main() {
 
             match notification {
                 Ok(_) => been_notified_high = true,
-                Err(_) => failure("Could not show notification"),
+                Err(_) => eprintln!("Could not show high charge notification"),
             }
         }
 

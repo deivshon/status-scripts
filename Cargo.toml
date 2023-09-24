@@ -15,7 +15,6 @@ serde_json = "1.0.104"
 whoami = "1.4.1"
 
 [profile.release]
-# opt-level = 'z'
 codegen-units = 1
 strip = true
 
@@ -54,3 +53,7 @@ path = "src/battery-notifier.rs"
 [[bin]]
 name = "proton-status"
 path = "src/proton.rs"
+
+[[bin]]
+name = "arch-updates-status"
+path = "src/arch-updates.rs"

@@ -38,13 +38,14 @@ fn main() {
         std::process::exit(0);
     }
 
-    let Some(interface) = utils::first_matching_dir(utils::NET_DIR,
-		Some(vec!["eth", "enp"]),
-		Some(&utils::operstate_up)
-	) else {
-		println!("{}", format_down);
-		std::process::exit(0);
-	};
+    let Some(interface) = utils::first_matching_dir(
+        utils::NET_DIR,
+        Some(vec!["eth", "enp"]),
+        Some(&utils::operstate_up),
+    ) else {
+        println!("{}", format_down);
+        std::process::exit(0);
+    };
 
     let mut data: HashMap<&str, &String> = HashMap::new();
     data.insert("%i", &interface);

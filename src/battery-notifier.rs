@@ -6,22 +6,14 @@ use std::thread::sleep;
 
 use argparse::{ArgumentParser, Store};
 use utils::is_dir_battery;
-use utils::{BATTERIES_PATH, CAPACITY_FILE, STATUS_FILE};
-
-fn failure(msg: &str) -> ! {
-    eprintln!("Failure: {}", msg);
-    std::process::exit(1);
-}
+use utils::{failure, BATTERIES_PATH, CAPACITY_FILE, STATUS_FILE};
 
 fn main() {
-    let Some(battery_path) = utils::first_matching_dir(
-		BATTERIES_PATH,
-		None,
-		Some(&is_dir_battery)
-	) else {
-		eprintln!("No battery found");
-		std::process::exit(0);
-	};
+    let Some(battery_path) = utils::first_matching_dir(BATTERIES_PATH, None, Some(&is_dir_battery))
+    else {
+        eprintln!("No battery found");
+        std::process::exit(0);
+    };
 
     let mut low_threshold: u8 = 20;
     let mut high_threshold: u8 = 80;

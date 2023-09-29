@@ -48,27 +48,24 @@ fn main() {
         std::process::exit(0);
     }
 
-    let Some(battery_path) = utils::first_matching_dir(
-		BATTERIES_PATH,
-		None,
-		Some(&is_dir_battery)
-	) else {
-		println!("{}", format_none);
-		std::process::exit(0);
-	};
+    let Some(battery_path) = utils::first_matching_dir(BATTERIES_PATH, None, Some(&is_dir_battery))
+    else {
+        println!("{}", format_none);
+        std::process::exit(0);
+    };
 
     let capacity_path = format!("{}/{}/{}", BATTERIES_PATH, battery_path, CAPACITY_FILE);
     let status_path = format!("{}/{}/{}", BATTERIES_PATH, battery_path, STATUS_FILE);
 
     let Ok(mut capacity) = fs::read_to_string(&capacity_path) else {
-		eprintln!("Could not open {}", &capacity_path);
-		std::process::exit(1);
-	};
+        eprintln!("Could not open {}", &capacity_path);
+        std::process::exit(1);
+    };
 
     let Ok(charging_state) = fs::read_to_string(&status_path) else {
-		eprintln!("Could not open {}", &status_path);
-		std::process::exit(1);
-	};
+        eprintln!("Could not open {}", &status_path);
+        std::process::exit(1);
+    };
     let is_charging = charging_state.trim() == "Charging";
 
     let mut data: HashMap<&str, &String> = HashMap::new();

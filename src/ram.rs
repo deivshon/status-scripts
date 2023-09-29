@@ -36,9 +36,9 @@ fn main() {
     }
 
     let Ok(meminfo) = fs::read_to_string(MEMINFO_PATH) else {
-		eprintln!("Could not read {}", MEMINFO_PATH);
-		std::process::exit(1);
-	};
+        eprintln!("Could not read {}", MEMINFO_PATH);
+        std::process::exit(1);
+    };
 
     let mut mem_total: Option<u64> = None;
     let mut mem_avail: Option<u64> = None;
@@ -62,9 +62,9 @@ fn main() {
     }
 
     let (Some(mem_total), Some(mem_avail)) = (mem_total, mem_avail) else {
-		eprintln!("Could not parse {}", MEMINFO_PATH);
-		std::process::exit(1);
-	};
+        eprintln!("Could not parse {}", MEMINFO_PATH);
+        std::process::exit(1);
+    };
     let mem_used = mem_total - mem_avail;
 
     let mut data: HashMap<&str, &String> = HashMap::new();

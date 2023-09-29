@@ -34,16 +34,16 @@ pub fn first_matching_dir(
     dir_check: Option<&dyn Fn(&str) -> bool>,
 ) -> Option<String> {
     let Ok(paths) = std::fs::read_dir(root_dir) else {
-		return None
-	};
+        return None;
+    };
 
     for p in paths {
-        let Ok(dir) = p else {continue};
+        let Ok(dir) = p else { continue };
 
         let dir_path = dir.path();
         let Some(dir_str) = dir_path.as_os_str().to_str() else {
-			continue
-		};
+            continue;
+        };
 
         let dir_split = dir_str.split("/").collect::<Vec<&str>>();
         let dir_name = dir_split[dir_split.len() - 1];
@@ -74,8 +74,8 @@ pub fn first_matching_dir(
 
 pub fn operstate_up(interface: &str) -> bool {
     let Ok(operstate) = std::fs::read_to_string(format!("{}/operstate", interface)) else {
-		return false;
-	};
+        return false;
+    };
 
     return operstate.trim() == "up";
 }
@@ -99,8 +99,8 @@ pub fn print_format_list(format_list: &[&[&str; 2]]) {
 
 pub fn is_dir_battery(dir: &str) -> bool {
     let Ok(power_type) = fs::read_to_string(format!("{}/type", dir)) else {
-		return false;
-	};
+        return false;
+    };
 
     return power_type.trim() == "Battery"
         && Path::new(&format!("{}/{}", dir, CAPACITY_FILE)).exists()

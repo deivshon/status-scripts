@@ -64,12 +64,12 @@ fn main() {
     }
 
     let Some(interface) = utils::first_matching_dir(
-		utils::NET_DIR,
-		Some(vec!["wlan", "wlp"]),
-		Some(&utils::operstate_up)
-	) else {
-		terminate_early(None, &format_up, &format_down);
-	};
+        utils::NET_DIR,
+        Some(vec!["wlan", "wlp"]),
+        Some(&utils::operstate_up),
+    ) else {
+        terminate_early(None, &format_up, &format_down);
+    };
 
     let mut iw_command = std::process::Command::new("iw");
     iw_command.arg("dev");
@@ -77,12 +77,12 @@ fn main() {
     iw_command.arg("link");
 
     let Ok(iw_result) = iw_command.output() else {
-		terminate_early(Some(interface), &format_up, &format_down);
-	};
+        terminate_early(Some(interface), &format_up, &format_down);
+    };
 
     let Ok(iw_output) = String::from_utf8(iw_result.stdout) else {
-		terminate_early(Some(interface), &format_up, &format_down);
-	};
+        terminate_early(Some(interface), &format_up, &format_down);
+    };
 
     let mut ssid: Option<&str> = None;
     let mut dbm: Option<i32> = None;
@@ -104,8 +104,8 @@ fn main() {
     }
 
     let (Some(dbm), Some(ssid)) = (dbm, ssid) else {
-		terminate_early(Some(interface), &format_up, &format_down);
-	};
+        terminate_early(Some(interface), &format_up, &format_down);
+    };
 
     let mut data: HashMap<&str, &String> = HashMap::new();
 

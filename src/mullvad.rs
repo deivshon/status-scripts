@@ -46,9 +46,9 @@ fn main() {
     }
 
     let Ok(res) = reqwest::blocking::get(MULLVAD_CHECK) else {
-		eprintln!("Could not send request to {}", MULLVAD_CHECK);
-		std::process::exit(1);
-	};
+        eprintln!("Could not send request to {}", MULLVAD_CHECK);
+        std::process::exit(1);
+    };
 
     let mullvad_data;
     match res.json::<MullvadData>() {
